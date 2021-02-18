@@ -1,0 +1,194 @@
+// Memgraph Foundation styles - Custom styles for demo or application purposes
+
+h4, h5, h6 {
+  font-weight: bold;
+}
+
+// Title bar
+.title-bar {
+  @include box-shadow();
+}
+
+// Off panel
+.card.off-panel {
+  position: fixed;
+  overflow-y: auto;
+  height: 100%;
+  padding-top: 60px;
+  top: 0;
+  width: 320px;
+  border-right: 1px solid $light-gray;
+  transform: translateX(-100%);
+  @include transition(transform);
+  border-radius: 0;
+  z-index: 1;
+  &.is-active {
+    transform: translateX(0);
+  }
+
+  // todo: decouple menu styles
+  // Menu inside off-panel
+  .menu li {
+    color: $brand-black;
+    font-family: $body-font-family;
+    font-weight: 400;
+    cursor: pointer;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    &.is-active {
+      color: $brand-primary;
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid $brand-silver;
+    }
+    h6 {
+      margin-bottom: 0;
+    }
+    p {
+      color: $brand-gray;
+      font-size: 85%;
+      font-family: $body-font-family;
+      font-weight:400;
+      margin-bottom: 0;
+    }
+  }
+  .card-section.menu li { // For full borders
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .card-section.menu + .card-section.menu {
+    border-top: 1px solid $brand-silver;
+  }
+
+  // Offset left for sub-off-panel - z-index to slide under main off-panel
+  &.off-panel-sub {
+    z-index: 0;
+    @include transition(transform, ease, .5s);
+    &.is-active {
+      transform: translateX(100%);
+      @include transition(transform);
+    }
+  }
+}
+
+// Main page content
+.off-panel-main {
+  @include transition(margin);
+  padding-top: 60px; // top padding to escape overlap from off-panel-button
+}
+
+// Toggle button for off-panel
+.off-panel-btn {
+  z-index: 0;
+  position: fixed;
+  left: 0;
+  top: 60px;
+  padding: 1rem 0.3rem;
+  border-radius: 0 0 6px 0;
+  @include gradient-auxiliary;
+  @include box-shadow();
+  cursor: pointer;
+  @include transition(left);
+  outline: none;
+  &:hover {
+    opacity: .75;
+  }
+}
+
+// Off-panel-main active content left-margin/positioning
+.is-active + .off-panel-main {
+  margin-left: 320px;
+  .off-panel-btn {
+    left: 320px;
+  }
+}
+
+.menu a.top-bar-title {
+  border-right: 1px solid $brand-silver;
+}
+
+// Side menu top elements
+.search-item {
+  border-bottom: 1px solid $brand-silver;
+  padding: 0.5rem;
+}
+
+.top-item {
+  border-bottom: 1px solid $brand-silver;
+  background: $brand-light;
+}
+
+// Off panel footer
+.card-section + .card-divider {
+  border-top: 1px solid $brand-silver;
+  @include box-shadow();
+  display: block;
+  padding: 0;
+  .footer-stats {
+    padding: 1.25rem;
+  }
+  .footer-copy {
+    border-top: 1px solid $brand-silver;
+    margin-top: -1px;
+    & > span:first-child {
+      display: inline-block;
+      padding: .85rem 0 0 1.25rem;
+      font-size: .7rem;
+    }
+    & > div:first-child {
+      display: inline-block;
+      padding: .5rem 0 0 1.25rem;
+      font-size: .7rem;
+    }
+    & > span:last-child {
+      border-left: 1px solid $brand-silver;
+    }
+  }
+}
+
+// Dropdown Tooltip
+.tooltip-lg {
+  &:after {
+    top: 100%;
+    left: 50%;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border: solid transparent;
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color: #ffffff;
+    border-width: 8px;
+    margin-left: -8px;
+  }
+}
+
+
+// Scale list
+ul.scale-list {
+  border-top: 1px solid $brand-silver;
+  border-bottom: 1px solid $brand-silver;
+  .scale-list-item {
+    padding: 0 !important;
+    p {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100%;
+      overflow: hidden;
+      span {
+        display: inline-block;
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+        width: 60px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.fixed-footer {
+  position: sticky;
+  bottom: 0;
+}

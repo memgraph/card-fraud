@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Card Fraud Demo | Memgraph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="shortcut icon" type="image/png" href="libs/memgraph-design/_dist/assets/img/favicon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="libs/memgraph-design/_dist/css/memgraph-foundation-app.css">
+    <link rel="stylesheet" href="libs/memgraph-design/_dist/assets/libs/fontello/css/fontello.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body>
+
+<!-- Main nav -->
+<nav data-sticky-container>
+    <div data-sticky data-options="marginTop:0;">
+        <div class="title-bar sticky">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li>
+                        <a href="/" class="top-bar-title">
+                            <img src="libs/memgraph-design/_dist/assets/img/img-logo-mark.svg" width="44" height="44"
+                                 alt="Memgraph logo">
+                        </a>
+                    </li>
+                    <li class="menu-text">
+                        Fraud Detection Demo
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- Side nav -->
+<div class="off-panel is-active card" id="off-panel" data-toggler=".is-active">
+    <div class="card-section">
+        <label class="help-text text-uppercase">Settings</label>
+
+        <label for="pos-devices">Total POS devices</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="20" data-start="1" data-end="200">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="pos-devices"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="pos-devices" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <label for="pos-devices">Fraudulent POS devices</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="5" data-start="0" data-end="200">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="fraudulent-pos"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="fraudulent-pos" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <label for="pos-devices">Number of cards</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="50" data-start="1" data-end="200">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="cards"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="cards" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <label for="pos-devices">Number of transactions</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="120" data-start="1" data-end="200">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="transactions"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="transactions" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <label for="pos-devices">Transactions to report (%)</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="40" data-start="0" data-end="100">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="transactions-report"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="transactions-report" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <button class="button primary hollow expanded" onclick="generateData()">Generate transactions</button>
+
+        <hr>
+
+        <label class="help-text text-uppercase">Run query</label>
+        <button class="button primary expanded" onclick="getCompromisedPos()"><span class="icon-ui-right"></span> Detect fraud</button>
+
+        <hr>
+
+        <label class="help-text text-uppercase"><span class="icon-ui-chart-line"></span> Key stats</label>
+        <div id="key-stats">
+          <p id="report-empty">
+            Nothing to show yet.
+          </p>
+          <div id="report-stats" style="display:none;">
+            <strong id="reported-frauds" class="text-primary">0</strong> reported transaction frauds
+          </div>
+          <div id="fraud-stats" style="display:none;">
+            <strong id="estimated-frauds" class="text-primary">0</strong> estimated POS frauds
+          </div>
+        </div>
+    </div>
+
+    <div class="card-divider">
+        <div class="footer-copy">
+            <span>Memgraph Ltd. 2021</span>
+            <span class="float-right">
+                <button class="button clear" data-open="intro-modal">
+                    <span class="icon-ui-info-circled"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<main class="off-panel-main card-section">
+    <button class="off-panel-btn" data-toggle="off-panel">
+        <span id="panel-close" class="icon-ui-left-open"></span>
+        <span id="panel-open" class="icon-ui-right-open hide"></span>
+    </button>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="text-center">
+        <div class="media-object" style="margin-top:80px">
+            <div class="media-object-section">
+                <img src="img/arrow.svg" alt="">
+            </div>
+            <div class="media-object-section">
+                <h6 class="title-decorative" style="margin-top:100px">Nothing here yet.</h6>
+                <p class="help-text">Start by configuring your transactions <br class="hide-for-small-only">
+                    from the menu on the left.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+        <div id="fraudulent-txs" class="large-4 cell" style="display:none;">
+            <h6>Reported as fraud</h6>
+            <div class="card">
+                <table id="tx-table" class="stack hover">
+                    <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tx-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="compromised-pos" class="large-8 cell" style="display:none;">
+            <h6>Fraudulent POS devices</h6>
+            <div class="card">
+                <table id="pos-table" class="stack hover">
+                    <thead>
+                    <tr>
+                        <th width="200">POS ID</th>
+                        <th># of connected frauds</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody id="pos-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- Modal for intro -->
+<div class="reveal fadein" id="intro-modal" data-reveal>
+    <button class="close-button" data-close aria-label="Close modal" type="button" data-toggle="step1 step2">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div id="step1" class="card-section" data-toggler=".hide">
+        <img alt="Card Fraud Detection" src="img/card-fraud.svg" class="float-center" width="96" height="96">
+        <br>
+        <h4 class="text-center">Fraud Detection Demo</h4>
+        <p class="text-center">
+            This is a demo for card-fraud detection with Memgraph. Simulate how a POS (point-of-sale) gets compromised, then
+            a card in contact with that POS gets compromised, and then some fraudulent transactions get reported. Based on
+            these reports Memgraph is used for looking for the root-cause (the compromized POS) of the reported fraudulent
+            transactions.
+        </p>
+        <button class="button primary float-center" data-toggle="step1 step2">Next</button>
+    </div>
+    <div id="step2" class="card-section hide" data-toggler=".hide">
+        <h4 class="text-center">Fraud Detection Demo - Flow</h4>
+
+        <div class="responsive-embed panorama">
+            <video controls autoplay>
+                <source src="img/memgraph-fd-demo-animation.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <button class="button primary float-center" data-close aria-label="Close modal" type="button" data-toggle="step1 step2">Close</button>
+    </div>
+</div>
+
+<script src="js/render.js"></script>
+<script src="js/graph.js"></script>
+<script src="js/index.js"></script>
+<script src="libs/memgraph-design/_dist/assets/libs/foundation-sites/dist/js/foundation.min.js"></script>
+<script>
+    $(document).foundation();
+
+    $('.off-panel-btn').click(function () {
+        $(this).children('span').toggleClass('hide');
+    });
+
+    getFraudulentTransactions();
+</script>
+</body>
+</html>

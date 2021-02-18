@@ -1,0 +1,20 @@
+version: "3"
+services:
+  memgraph:
+    image: "memgraph"
+    ports:
+      - "7687:7687"
+  card_fraud:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    environment:
+      MG_HOST: memgraph
+      MG_PORT: 7687
+      MG_USERNAME: ""
+      MG_PASSWORD: ""
+      MG_ENCRYPTED: "false"
+    depends_on:
+      - memgraph

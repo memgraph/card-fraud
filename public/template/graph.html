@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Card Fraud Demo | Memgraph</title>
+    <link rel="stylesheet" href="libs/memgraph-design/_dist/css/memgraph-foundation-app.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+    <link rel="shortcut icon" type="image/png" href="libs/memgraph-design/src/assets/img/favicon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/neo4j-driver"></script>
+    <script src="https://d3js.org/d3.v3.js"></script>
+  </head>
+  <body>
+  <!-- Main nav -->
+  <nav data-sticky-container>
+      <div data-sticky data-options="marginTop:0;">
+          <div class="top-bar title-bar sticky">
+              <div class="top-bar-left">
+                  <ul class="menu">
+                      <li>
+                          <a href="/" class="top-bar-title">
+                              <img src="libs/memgraph-design/_dist/assets/img/img-logo-mark.svg" width="44" height="44"
+                                   alt="Memgraph logo">
+                          </a>
+                      </li>
+                      <li class="menu-text">
+                          <strong>POS ID:</strong> <span id="pos-id" style="font-weight: 300;"></span>
+                      </li>
+                      <li class="menu-text">
+                          <strong>Connected frauds:</strong> <span id="pos-frauds" style="font-weight: 300;"></span>
+                      </li>
+                  </ul>
+              </div>
+
+              <div class="top-bar-right">
+                  <ul class="menu">
+                      <li style="margin-right: 5px;">
+                          <button
+                                  class="button primary"
+                                  style="padding: 0.5rem;"
+                                  type="button"
+                                  onclick="resolvePOS();">
+                              Resolve POS
+                          </button>
+                      </li>
+                      <li style="margin-right: 5px;">
+                          <button
+                                  class="button primary hollow"
+                                  style="padding: 0.5rem;"
+                                  type="button"
+                                  onclick="window.close();">
+                              Close
+                          </button>
+                      </li>
+                  </ul>
+              </div>
+
+          </div>
+      </div>
+  </nav>
+
+  <main class="off-panel-main card-section" id="result-container">
+    <svg id="canvas-container"
+         viewBox="0 0 1920 1096"
+         preserveAspectRatio="xMinYMin meet">
+    </svg>
+  </main>
+    <script src="js/render.js"></script>
+    <script src="js/graph.js"></script>
+    <script src="libs/memgraph-design/_dist/assets/libs/foundation-sites/dist/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+
+      var get = (new URL(document.location)).searchParams;
+      var pos = get.get('pos');
+      var frauds = get.get('frauds');
+
+      document.getElementById("pos-id").innerHTML = pos;
+      document.getElementById("pos-frauds").innerHTML = frauds;
+
+      init(pos);
+    </script>
+  </body>
+</html>

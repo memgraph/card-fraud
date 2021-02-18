@@ -1,0 +1,16 @@
+// 1. Typography
+
+// Fonts
+
+// Base fonts
+@include font-face("fontello", "../assets/libs/fontello/font/fontello", 400, normal, ttf);
+@include font-face("Encode Sans", "../assets/fonts/Encode_Sans_Semi_Condensed/EncodeSansSemiCondensed-Regular", 400, normal, ttf);
+@include font-face("Encode Sans 600", "../assets/fonts/Encode_Sans_Semi_Condensed/EncodeSansSemiCondensed-Bold", 600, normal, ttf);
+@include font-face("Encode Sans 800", "../assets/fonts/Encode_Sans_Semi_Condensed/EncodeSansSemiCondensed-ExtraBold", 800, normal, ttf);
+@include font-face("Roboto", "../assets/fonts/Roboto/Roboto-Regular", 400, normal, ttf);
+@include font-face("Roboto 700", "../assets/fonts/Roboto/Roboto-Bold", 700, normal, ttf);
+@include font-face("PT Mono", "../assets/fonts/PTM55FT", 400, normal, ttf);
+
+$header-font-family: 'Encode Sans', Roboto, Arial, sans-serif;
+$body-font-family: 'Roboto', Arial, sans-serif;
+$monospace-font-family: 'PT Mono', Consolas, Curier, monospace;

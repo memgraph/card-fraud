@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="241px" height="144px" viewBox="0 0 241 144" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Fraud-detection-demo-v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-1.000000, -43.000000)">
+            <path d="M224.558273,205.823526 C155.591276,196.556199 105.62428,174.589202 74.6572828,139.922535 C43.690286,105.255869 24.7935216,64.8050488 17.9669895,18.5700757" id="Line-6" stroke="#FFC500" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel" stroke-dasharray="8" transform="translate(121.262631, 112.196801) rotate(-11.000000) translate(-121.262631, -112.196801) "></path>
+            <path d="M2.53684904,44.6440143 L8.61574347,46.0549784 L8.61574347,46.0549784 C9.15372655,46.179849 9.48862043,46.717198 9.36374988,47.2551811 C9.32045392,47.4417143 9.22451081,47.6118941 9.0873239,47.7454939 L4.20477006,52.5003809 L4.20477006,52.5003809 C3.80910722,52.8856981 3.17599779,52.8773113 2.79068057,52.4816485 C2.65472244,52.3420399 2.5625176,52.165749 2.5253994,51.9744445 L1.3290588,45.8085934 L1.3290588,45.8085934 C1.22386257,45.2664198 1.57810271,44.7416229 2.1202763,44.6364267 C2.25812648,44.60968 2.40006431,44.6122653 2.53684904,44.6440143 Z" id="Rectangle-7" fill="#FFC500" transform="translate(5.350216, 48.701045) rotate(22.000000) translate(-5.350216, -48.701045) "></path>
+        </g>
+    </g>
+</svg>

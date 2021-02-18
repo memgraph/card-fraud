@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Memgraph Demo template</title>
+
+    <link rel="stylesheet" href="css/memgraph-foundation-app.css">
+    <link rel="stylesheet" href="assets/libs/fontello/css/fontello.css">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+
+</head>
+<body>
+
+<!-- Main nav -->
+<nav data-sticky-container>
+    <div data-sticky data-options="marginTop:0;">
+        <div class="title-bar sticky">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li>
+                        <a href="/" class="top-bar-title">
+                            <img src="assets/img/img-logo-mark.svg" width="44" height="44"
+                                 alt="Memgraph logo">
+                        </a>
+                    </li>
+                    <li class="menu-text">
+                        Fraud Detection Demo
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- Side nav -->
+<div class="off-panel is-active card" id="off-panel" data-toggler=".is-active">
+    <div class="card-section search-item">
+
+        <div class="input-group">
+            <input class="input-group-field" type="text" placeholder="Search">
+            <div class="input-group-button">
+                <button class="button">
+                    <span class="icon-ui-search"></span>
+                </button>
+            </div>
+            <div class="input-group-button hide">
+                <button type="button" class="button secondary clear">
+                    <span class="icon-ui-cancel"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-section">
+        <div class="button-group expanded small">
+            <a class="button">Dependencies</a>
+            <a class="button hollow">Dependents</a>
+        </div>
+    </div>
+    <ul class="card-section scale-list menu vertical">
+        <li class="scale-list-item">
+            <p>
+                <span style="background-color: #FC0D1B; color: #fff;">
+                    3215
+                </span>
+                left-pad
+            </p>
+        </li>
+        <li class="scale-list-item is-active">
+            <p>
+                <span style="background-color: #FC363B; color: #fff;">
+                    1453
+                </span>
+                babel-preset-es2015
+            </p>
+        </li>
+        <li class="scale-list-item">
+            <p>
+                <span style="background-color: #FC6769; color: #fff;">
+                    1212
+                </span>
+                react-native
+            </p>
+        </li>
+    </ul>
+    <div class="card-section">
+        <label class="help-text text-uppercase">Settings</label>
+
+        <label for="pos-devices">Total POS devices</label>
+        <div class="container">
+            <div class="grid-x">
+                <div class="small-9">
+                    <div class="slider" data-slider data-initial-start="50" data-start="50" data-end="200">
+                        <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                              aria-controls="pos-devices"></span>
+                        <span class="slider-fill" data-slider-fill></span>
+                    </div>
+                </div>
+                <div class="small-3">
+                    <input type="number" id="pos-devices">
+                </div>
+            </div>
+        </div>
+
+        <button class="button primary hollow expanded">Generate transactions</button>
+        <label class="help-text text-uppercase">Run query</label>
+        <button class="button primary expanded"><span class="icon-ui-right"></span> Detect fraud</button>
+    </div>
+
+    <ul id="example-list" class="card-section menu vertical">
+        <li>
+            <label class="help-text text-uppercase">Queries</label>
+        </li>
+        <li id="0">
+            Top Mixing Services
+            <p>Find top mixing service addresses</p>
+        </li>
+        <li id="1" class="is-active">
+            Top Miners
+            <p>Find top addresses that mined the most ether</p>
+        </li>
+        <li id="2">
+            Top Balances
+            <p>Find top addresses with the most ether</p>
+        </li>
+    </ul>
+
+    <ul id="sub-panel-menu" class="card-section menu vertical">
+        <li id="tweets" data-toggle="off-sub-tweets">
+            <h6>Tweets <span class="icon-ui-right-open float-right"></span></h6>
+        </li>
+        <li id="attendees" class="is-active" data-toggle="off-sub-attendees">
+            <h6>Attendees <span class="icon-ui-right-open float-right"></span></h6>
+        </li>
+    </ul>
+
+    <ul class="card-section menu vertical">
+        <li>
+            Tweets
+        </li>
+        <li class="is-active">
+            Attendees
+        </li>
+    </ul>
+
+    <div class="card-divider fixed-footer">
+        <div class="footer-stats">
+            <label class="help-text text-uppercase"><span class="icon-ui-chart-line"></span> Key stats</label>
+            <div><strong class="text-primary">123,123</strong> transactions</div>
+            <div><strong class="text-primary">123,123</strong> reported frauds</div>
+            <div><strong class="text-primary">123,123</strong> rows</div>
+        </div>
+        <div class="footer-copy">
+            <span>Memgraph Ltd. 2018</span>
+            <span class="float-right">
+                <button class="button clear" data-open="intro-modal">
+                    <span class="icon-ui-info-circled"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Content - put text content & tables into card-section. If only graphs are to be shown, don't add card-section -->
+<main class="off-panel-main card-section">
+    <button class="off-panel-btn" data-toggle="off-panel">
+        <span id="panel-close" class="icon-ui-left-open"></span>
+        <span id="panel-open" class="icon-ui-right-open hide"></span>
+    </button>
+
+    <!-- Empty state -->
+    <div class="align-self-middle text-center">
+        <h6 class="title-decorative">Nothing here yet.</h6>
+        <p class="help-text">Start by <span data-tooltip class="top" tabindex="2"  title="Test tooltip with very long text here, hooray.">configuring</span> your <span data-tooltip class="top" tabindex="2"  title="Test">transactions</span> <br class="hide-for-small-only">
+            from the menu on the left.
+        </p>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+        <div class="large-4 cell">
+            <h6>Reported as fraud</h6>
+            <div class="card">
+                <table class="stack hover">
+                    <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>f653regjtzuz534reffr4uz53t4e</td>
+                    </tr>
+                    <tr>
+                        <td>f653regjtzuz534reffr4uz53t4e</td>
+                    </tr>
+                    <tr>
+                        <td>f653regjtzuz534reffr4uz53t4e</td>
+                    </tr>
+                    <tr>
+                        <td>f653regjtzuz534reffr4uz53t4e</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Dropdown as popup - Person/Company info-->
+            <div class="label" data-toggle="example-dropdown-1">Person</div>
+            <div class="tooltip-lg dropdown-pane" data-position="top" data-alignment="center" data-v-offset="10" id="example-dropdown-1" data-dropdown data-close-on-click="true" data-auto-focus="true">
+                <div class="media-object">
+                    <div class="media-object-section">
+                        <img class="thumbnail" alt="Name" src="https://placeimg.com/56/56/people" width="56" height="56">
+                    </div>
+                    <div class="media-object-section">
+                        <h6>Michael Li</h6>
+                        <p class="help-text">
+                            CEO
+                            <br>
+                            The Data Incubator
+                        </p>
+                    </div>
+                </div>
+                <p class="text-small no-margin">
+                    Michael Li is an American data scientist and the founder and Chief Executive Officer of The Data Incubator, a data science training company...
+                    <a href="#">See more</a>
+                </p>
+            </div>
+
+            <!-- Dropdown as popup - Tweet -->
+            <div class="label" data-toggle="example-dropdown-3">Tweet</div>
+            <div class="tooltip-lg dropdown-pane" data-position="top" data-alignment="center" data-v-offset="10" id="example-dropdown-3" data-dropdown data-close-on-click="true" data-auto-focus="true">
+                <div class="media-object">
+                    <div class="media-object-section">
+                        <img class="thumbnail" src="https://placeimg.com/30/30/people" alt="User" width="40" height="40">
+                    </div>
+                    <div class="media-object-section main-section">
+                        <a href="#" class="help-text" target="_blank">@userhandle</a>
+                    </div>
+                    <div class="media-object-section help-text no-margin">
+                        Jan 20
+                    </div>
+                </div>
+                <div class="help-text">
+                    LIVE on <a href="#">#Periscope</a>: Idea to insight in 7 minutes - live from Singapore <a href="#">#StrataHadoop</a> <a href="#">https://t.co/t5XU5OheGU</a>
+                </div>
+            </div>
+
+            <!-- Dropdown as popup - Other info-->
+            <div class="label" data-toggle="example-dropdown-2">Other</div>
+            <div class="tooltip-lg dropdown-pane" data-position="top" data-alignment="center" data-v-offset="10" id="example-dropdown-2" data-dropdown data-close-on-click="true" data-auto-focus="true">
+                <h6 class="text-center">Tue, March 6 2018</h6>
+                <p class="text-small text-center no-margin">
+                    Tutorials
+                </p>
+            </div>
+
+        </div>
+        <div class="large-8 cell">
+            <h6>Fraudulent POS devices</h6>
+            <div class="card">
+                <table class="stack hover">
+                    <thead>
+                    <tr>
+                        <th width="200">POS ID</th>
+                        <th># of connected frauds</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>fgz894eiwfg57u3i4reg87zf</td>
+                        <td>234,543</td>
+                        <td>
+                            <a href="#">View on graph</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- Side sub-nav for tweets - should always be listed in markup after main content-->
+<div class="off-panel off-panel-sub card" id="off-sub-tweets" data-toggler=".is-active">
+    <div class="card-section">
+
+        <button class="float-right" data-toggle="off-sub-tweets">
+            <span class="icon-ui-cancel"></span>
+        </button>
+
+        <label class="help-text text-uppercase">Latest Tweets</label>
+
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="media-object">
+                    <div class="media-object-section">
+                        <img class="thumbnail" src="https://placeimg.com/30/30/people" alt="User" width="30" height="30">
+                    </div>
+                    <div class="media-object-section main-section">
+                        <a href="#" class="help-text" target="_blank">@userhandle</a>
+                    </div>
+                    <div class="media-object-section help-text no-margin">
+                        Jan 20
+                    </div>
+                </div>
+                <div class="help-text">
+                    LIVE on <a href="#">#Periscope</a>: Idea to insight in 7 minutes - live from Singapore <a href="#">#StrataHadoop</a> <a href="#">https://t.co/t5XU5OheGU</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<!-- Side sub-nav for attendees -->
+<div class="off-panel off-panel-sub card" id="off-sub-attendees" data-toggler=".is-active">
+    <div class="card-section">
+
+        <button class="float-right" data-toggle="off-sub-attendees">
+            <span class="icon-ui-cancel"></span>
+        </button>
+
+        <label class="help-text text-uppercase">Attendee List</label>
+
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="media-object">
+                    <div class="media-object-section">
+                        <img class="thumbnail" src="https://placeimg.com/30/30/people" alt="User" width="30" height="30">
+                    </div>
+                    <div class="media-object-section main-section">
+                       <p class="text-condensed">
+                           <strong>Name Surname</strong>
+                            <span class="help-text">
+                               @userhandle
+                           </span>
+                       </p>
+                        <p class="help-text">
+                            Joined on Jan 20
+                        </p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<!-- Callout for real-time notifications -->
+<div class="callout callout-fixed" data-closable>
+    <h6>New tweet from @userhandle</h6>
+    <p class="no-margin">#StrataHadoop World #Singapore, Dec 1-3: use...
+    <button class="button secondary clear">See more</button>
+    </p>
+
+    <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- modal for intro -->
+<div class="reveal fadein" id="intro-modal" data-reveal>
+    <button class="close-button" data-close aria-label="Close modal" type="button" data-toggle="step1 step2">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div id="step1" class="card-section" data-toggler=".hide">
+        <!--<img alt="" src="assets/img/card-fraud.svg" class="float-center" width="96" height="96">-->
+        <br>
+        <h4 class="text-center">Fraud Detection Demo</h4>
+        <p class="text-center">
+            This is a demo for card-fraud detection with Memgraph. Simulate how a POS (point-of-sale) gets compromised, then
+            a card in contact with that POS gets compromised, and then some fraudulent transactions get reported. Based on
+            these reports Memgraph is used for looking for the root-cause (the compromized POS) of the reported fraudulent
+            transactions.
+        </p>
+        <button class="button primary float-center" data-toggle="step1 step2">Next</button>
+    </div>
+    <div id="step2" class="card-section hide" data-toggler=".hide">
+        Demo flow here TBD
+        <!--todo: graph image-->
+
+        <button class="button primary float-center" data-close aria-label="Close modal" type="button" data-toggle="step1 step2">Close</button>
+    </div>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="assets/libs/foundation-sites/dist/js/foundation.min.js"></script>
+<script>
+    $(document).foundation();
+
+    $('.off-panel-btn').click(function () {
+        $(this).children('span').toggleClass('hide');
+    });
+</script>
+</body>
+</html>

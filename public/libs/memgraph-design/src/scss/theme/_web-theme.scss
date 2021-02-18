@@ -1,0 +1,79 @@
+// Memgraph Foundation styles - Custom styles for website / landing page purposes
+
+// Default settings
+
+// Banner Component
+
+// Default banner class
+.banner {
+  @include banner;
+  .banner-inner {
+    @include grid-row;
+    @include animation(fadein);
+    position: relative;
+  }
+}
+
+// Mobile padding for content
+@media screen and (max-width: 500px) {
+  .banner-inner {
+    padding: 0 1rem;
+  }
+}
+
+// Used for top page banners, to give space for navigation
+.banner-lead {
+  padding-top: 160px;
+  padding-bottom:100px;
+  p.lead {
+    margin-top: 20px;
+    margin-bottom: 0;
+    color:  $white;
+  }
+}
+
+// Banner in colors
+// 1. Gradient
+.banner-gradient {
+  background-image: linear-gradient(136deg, #FFC500 0%, #FB6E00 33%, #720096 100%);
+  color: $white;
+}
+
+// 3. Black (Used for notes)
+.banner-note {
+  background-color: $black;
+  padding: $global-padding*1.2;
+  color: $white;
+  text-align: center;
+  vertical-align: baseline;
+  .button {
+    margin-bottom: 0;
+    margin-left: 10px;
+  }
+}
+
+// More padding for content in grids
+.padded {
+  .padded-item {
+    padding: 2rem 1rem 0;
+  }
+}
+
+// Card Component
+.card {
+  background-color: $brand-white;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.07);
+  border: $lighter-gray;
+  transition: box-shadow ease-out 0.2s;
+  &.clickable {
+    &:hover, &:active, &:focus {
+      box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.17);
+    }
+    a {
+      padding: 1rem;
+      display: block;
+      color: $black;
+      cursor: pointer;
+    }
+  }
+}

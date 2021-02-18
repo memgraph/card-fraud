@@ -1,0 +1,60 @@
+// --------------------------------------------------
+// APP.SCSS
+// --------------------------------------------------
+// This is our main SCSS file that imports everything
+// that gets compiled into memgraph-foundation-web.css,
+// to be used in web projects (landing pages and similar).
+
+// Import order:
+// 1.  Encoding
+// 2.  Helpers
+// 3.  Icons
+// 4.  Foundation
+// 5.  Theme
+
+//
+// 1. Encoding
+// --------------------------------------------------
+@charset "UTF-8";
+
+
+// 2. Helpers
+// --------------------------------------------------
+
+// Global colors
+@import 'base/colors';
+
+// Mixins
+@import 'helpers/mixins';
+
+// Global typography
+@import 'base/typography';
+
+// Functions
+@import 'helpers/functions';
+
+
+// 3. Icon Font
+// --------------------------------------------------
+
+//@import '../assets/libs/fontello/css/fontello.css';
+
+
+// 4. Foundation
+// --------------------------------------------------
+// Source: http://foundation.zurb.com/docs/
+// Notes:
+// - Foundation's component styles are set
+//   in foundation/_settings.
+// - Modify the _settings.scss file before overriding
+//   the component styles on your own.
+// - Need a specific foundation component? Enable it
+//   in foundation/_foundation.scss.
+
+// Import all of Foundation
+@import 'memgraph-foundation/foundation';
+
+
+// 5. Themes
+@import 'theme/theme';
+@import 'theme/web-theme';
