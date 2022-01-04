@@ -3,15 +3,13 @@ import logging
 import os
 import time
 from argparse import ArgumentParser
-from database import Memgraph
 from flask import Flask, render_template, request, Response
+from gqlalchemy import Memgraph
 from random import randint, sample
 
-MG_HOST = os.getenv('MG_HOST', '127.0.0.1')
-MG_PORT = int(os.getenv('MG_PORT', '7687'))
-MG_USERNAME = os.getenv('MG_USERNAME', '')
-MG_PASSWORD = os.getenv('MG_PASSWORD', '')
-MG_ENCRYPTED = os.getenv('MG_ENCRYPT', 'false').lower() == 'true'
+
+MEMGRAPH_HOST = os.getenv("MEMGRAPH_HOST", "memgraph")
+MEMGRAPH_PORT = int(os.getenv("MEMGRAPH_PORT", "7687"))
 
 log = logging.getLogger(__name__)
 
@@ -19,20 +17,19 @@ log = logging.getLogger(__name__)
 def init_log():
     logging.basicConfig(level=logging.INFO)
     log.info("Logging enabled")
+    # Set the log level for werkzeug to WARNING because it will print out too much info otherwise
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
-init_log()
-
-
+# Parse the input arguments for the app
 def parse_args():
     '''
     Parse command line arguments.
     '''
     parser = ArgumentParser(description=__doc__)
-    parser.add_argument("--app-host", default="0.0.0.0",
+    parser.add_argument("--host", default="0.0.0.0",
                         help="Allowed host addresses.")
-    parser.add_argument("--app-port", default=5000, type=int,
+    parser.add_argument("--port", default=5000, type=int,
                         help="App port.")
     parser.add_argument("--template-folder", default="public/template",
                         help="The folder with flask templates.")
@@ -40,28 +37,18 @@ def parse_args():
                         help="The folder with flask static files.")
     parser.add_argument("--debug", default=True, action="store_true",
                         help="Run web server in debug mode")
-    parser.add_argument('--clean-on-start', action='store_true',
-                        help='Should the DB be emptied on script start')
     print(__doc__)
     return parser.parse_args()
 
 
 args = parse_args()
+memgraph = None
 
-
-db = Memgraph(host=MG_HOST, port=MG_PORT, username=MG_USERNAME,
-              password=MG_PASSWORD, encrypted=MG_ENCRYPTED)
+# Create the Flask server instance
 app = Flask(__name__,
             template_folder=args.template_folder,
             static_folder=args.static_folder,
             static_url_path='')
-
-
-def clear_db():
-    """Clear the database."""
-
-    db.execute_query("MATCH (n) DETACH DELETE n")
-    log.info("Database cleared")
 
 
 def init_data(card_count, pos_count):
@@ -71,10 +58,10 @@ def init_data(card_count, pos_count):
         card_count, pos_count))
     start_time = time.time()
 
-    db.execute_query("UNWIND range(0, {} - 1) AS id "
+    memgraph.execute("UNWIND range(0, {} - 1) AS id "
                      "CREATE (:Card {{id: id, compromised: false}})".format(
                          card_count))
-    db.execute_query("UNWIND range(0, {} - 1) AS id "
+    memgraph.execute("UNWIND range(0, {} - 1) AS id "
                      "CREATE (:Pos {{id: id, compromised: false}})".format(
                          pos_count))
 
@@ -84,7 +71,7 @@ def init_data(card_count, pos_count):
 def compromise_pos(pos_id):
     """Mark a POS device as compromised."""
 
-    db.execute_query(
+    memgraph.execute(
         "MATCH (p:Pos {{id: {}}}) SET p.compromised = true".format(pos_id))
     log.info("Point of sale %d is compromised", pos_id)
 
@@ -121,7 +108,7 @@ def pump_transactions(card_count, pos_count, tx_count, report_pct):
 
     def rint(max): return randint(0, max - 1)
     for i in range(tx_count):
-        db.execute_query(query.format(rint(card_count),
+        memgraph.execute(query.format(rint(card_count),
                                       rint(pos_count),
                                       i))
 
@@ -136,7 +123,7 @@ def resolve_pos():
     data = request.get_json(silent=True)
     start_time = time.time()
 
-    db.execute_query("MATCH (p:Pos {{id: {}}}) "
+    memgraph.execute("MATCH (p:Pos {{id: {}}}) "
                      "SET p.compromised = false "
                      "WITH p MATCH (p)--(t:Transaction)--(c:Card) "
                      "SET t.fraudReported = false, c.compromised = false".format(data['pos']))
@@ -159,11 +146,11 @@ def get_compromised_pos():
     log.info("Getting compromised Point Of Service IDs")
     start_time = time.time()
 
-    data = db.execute_and_fetch("MATCH (t:Transaction {fraudReported: true})-[:Using]->(:Card)"
-                                "<-[:Using]-(:Transaction)-[:At]->(p:Pos) "
-                                "WITH p.id as pos, count(t) as connected_frauds "
-                                "WHERE connected_frauds > 1 "
-                                "RETURN pos, connected_frauds ORDER BY connected_frauds DESC")
+    data = memgraph.execute_and_fetch("MATCH (t:Transaction {fraudReported: true})-[:Using]->(:Card)"
+                                      "<-[:Using]-(:Transaction)-[:At]->(p:Pos) "
+                                      "WITH p.id as pos, count(t) as connected_frauds "
+                                      "WHERE connected_frauds > 1 "
+                                      "RETURN pos, connected_frauds ORDER BY connected_frauds DESC")
     data = list(data)
 
     log.info("Found %d POS with more then one fraud in %.2f sec",
@@ -179,7 +166,7 @@ def get_fraudulent_transactions():
     log.info("Getting fraudulent transactions")
     start_time = time.time()
 
-    data = db.execute_and_fetch(
+    data = memgraph.execute_and_fetch(
         "MATCH (t:Transaction {fraudReported: true}) RETURN t.id as id")
     data = list(data)
 
@@ -209,7 +196,7 @@ def generate_data():
 
     start_time = time.time()
 
-    clear_db()
+    memgraph.drop_database()
     init_data(data['cards'], data['pos'])
     compromise_pos_devices(data['pos'], data['frauds'])
     pump_transactions(data['cards'], data['pos'],
@@ -230,9 +217,9 @@ def host():
 
     request_data = request.get_json(silent=True)
 
-    data = db.execute_and_fetch("MATCH (p1:Pos)<-[:At]-(t1:Transaction {{fraudReported: true}})-[:Using] "
-                                "->(c:Card)<-[:Using]-(t2:Transaction)-[:At]->(p2:Pos {{id: {}}})"
-                                "RETURN p1, t1, c, t2, p2".format(request_data['pos']))
+    data = memgraph.execute_and_fetch("MATCH (p1:Pos)<-[:At]-(t1:Transaction {{fraudReported: true}})-[:Using] "
+                                      "->(c:Card)<-[:Using]-(t2:Transaction)-[:At]->(p2:Pos {{id: {}}})"
+                                      "RETURN p1, t1, c, t2, p2".format(request_data['pos']))
     data = list(data)
 
     output = []
@@ -251,6 +238,7 @@ def host():
         mimetype='application/json')
 
 
+# Retrieve the home page for the app
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -263,16 +251,22 @@ def graph():
                            frauds=request.args.get('frauds'))
 
 
+# Entrypoint for the app that will be executed first
 def main():
+    # Code that should only be run once
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        init_log()
 
-    if args.clean_on_start:
-        clear_db()
-
-    db.execute_query("CREATE INDEX ON :Card(id)")
-    db.execute_query("CREATE INDEX ON :Pos(id)")
-    db.execute_query("CREATE INDEX ON :Transaction(fraudReported)")
-
-    app.run(host=args.app_host, port=args.app_port, debug=args.debug)
+        global memgraph
+        memgraph = Memgraph(MEMGRAPH_HOST,
+                            MEMGRAPH_PORT)
+        
+        memgraph.execute("CREATE INDEX ON :Card(id)")
+        memgraph.execute("CREATE INDEX ON :Pos(id)")
+        memgraph.execute("CREATE INDEX ON :Transaction(fraudReported)")
+    app.run(host=args.host,
+            port=args.port,
+            debug=args.debug)
 
 
 if __name__ == "__main__":

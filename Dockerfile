@@ -1,36 +1,23 @@
-FROM python:3.8
+FROM python:3.9
 
-# Install CMake
+# Install CMake for gqlalchemy
 RUN apt-get update && \
-  apt-get --yes install cmake
-
-# Install mgclient
-RUN apt-get install -y git cmake make gcc g++ libssl-dev && \
-  git clone https://github.com/memgraph/mgclient.git /mgclient && \
-  cd mgclient && \
-  git checkout dd5dcaaed5d7c8b275fbfd5d2ecbfc5006fa5826 && \
-  mkdir build && \
-  cd build && \
-  cmake .. && \
-  make && \
-  make install
-
-# Install pymgclient
-RUN git clone https://github.com/memgraph/pymgclient /pymgclient && \
-  cd pymgclient && \
-  python3 setup.py build && \
-  python3 setup.py install
+    apt-get --yes install cmake && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install packages
 COPY requirements.txt ./
 RUN pip3 install -r requirements.txt
 
+# Copy the source code
 COPY public /app/public
 COPY card_fraud.py /app/card_fraud.py
 WORKDIR /app
 
+# Set the environment variables
 ENV FLASK_ENV=development
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
+# Start the web application
 ENTRYPOINT ["python3", "card_fraud.py"]
