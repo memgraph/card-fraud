@@ -1,2 +1,2 @@
 Flask==2.0.2
-gqlalchemy==1.0.5
+gqlalchemy==1.1.2

@@ -11,6 +11,7 @@ RUN pip3 install -r requirements.txt
 
 # Copy the source code
 COPY public /app/public
+COPY models.py /app/models.py
 COPY card_fraud.py /app/card_fraud.py
 WORKDIR /app
 
