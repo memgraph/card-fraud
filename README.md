@@ -40,9 +40,7 @@ You will need:
 
 ## Running the app
 
-### With a bash script
-
-You can start everything with:
+You can start everything using Docker Compose:
 
 ```
 docker-compose build
