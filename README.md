@@ -2,6 +2,9 @@
  🔍 Credit Card Fraud Demo 🔍
 </h1>
 
+> [!NOTE]  
+> We no longer host the Card fraud app on `https://cardfraud.memgraph.com/`. You can still check out this project to learn how to build an app with Memgraph.
+
 <p align="center">
   <a href="https://github.com/g-despot/card-fraud/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/g-despot/card-fraud" alt="license" title="license"/>
