@@ -30,7 +30,7 @@ generated each time the app is started.
 ## Data model
 
 <p align="left">
-  <img width="600px" src="https://public-assets.memgraph.com/how-to-develop-a-credit-card-fraud-detection-application-using-memgraph-flask-and-d3js/graph-schema.png" alt="memgraph-tutorial-credit-card-fraud-data-model">
+  <img width="600px" src="img/graph-schema.png" alt="memgraph-tutorial-credit-card-fraud-data-model">
 </p>
 
 ## Prerequisites
